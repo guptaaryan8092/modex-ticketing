@@ -16,6 +16,19 @@
     npm run dev
     ```
 
+### Booking Concurrency Handling
+
+We use **Pessimistic Locking** (Row-level locking) to handle concurrent bookings.
+When a booking request is received:
+1. A `PENDING` booking record is continually created.
+2. A Database Transaction is started.
+3. The specific `Shows` row is locked using `SELECT ... FOR UPDATE`. This prevents other transactions from reading the `booked_seats` of this show until the current transaction completes.
+4. We check if the requested seats are already present in the `booked_seats` array of the `Show`.
+5. If available, we update `booked_seats` and set the booking status to `CONFIRMED`.
+6. If not available, the transaction rolls back, and the booking is marked as `FAILED`.
+
+This ensures that even if multiple requests successfully pass the initial service layer checks, the database lock ensures they are processed serially for the critical "check then update" section, preventing overbooking.
+
 ## API Endpoints
 
 ### Create a Show

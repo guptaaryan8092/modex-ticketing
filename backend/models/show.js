@@ -20,7 +20,11 @@ module.exports = (sequelize, DataTypes) => {
         },
         name: DataTypes.STRING,
         start_time: DataTypes.DATE,
-        total_seats: DataTypes.INTEGER
+        total_seats: DataTypes.INTEGER,
+        booked_seats: {
+            type: DataTypes.ARRAY(DataTypes.INTEGER),
+            defaultValue: []
+        }
     }, {
         sequelize,
         modelName: 'Show',
