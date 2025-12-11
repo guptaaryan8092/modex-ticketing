@@ -1,6 +1,7 @@
 import { useEffect, useState, useCallback } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useShowsApi } from '../hooks/useShowsApi';
+import { useOptimisticBooking } from '../hooks/useOptimisticBooking';
 import { SeatGrid } from '../components/SeatGrid';
 import { BookingSummary } from '../components/BookingSummary';
 import { ArrowLeft, RefreshCw, AlertCircle } from 'lucide-react';
@@ -20,7 +21,7 @@ export default function Booking() {
         const data = await fetchSeatMap(id);
         if (data) {
             setSeatMap(data);
-            // Clean up selected seats if they become booked
+            // Clean up selected seats if they become booked remotely
             setSelectedSeats(prev => prev.filter(s => !data.booked.includes(s)));
         }
     }, [id, fetchSeatMap]);
@@ -32,27 +33,34 @@ export default function Booking() {
         };
         init();
 
-        // Poll for updates
         const interval = setInterval(loadData, 5000);
         return () => clearInterval(interval);
     }, [loadData]);
 
-    const handleBook = async () => {
+    // Hook for Optimistic UI
+    // Note: we wrap bookSeats to match the hook's signature if needed, or pass directly
+    const { optimisticBookedSeats, handleBook: triggerOptimisticBook, isSubmitting, error: optimisticError }
+        = useOptimisticBooking(
+            seatMap?.booked || [],
+            (seats) => bookSeats(id!, seats)
+        );
+
+    const handleConfirm = async () => {
         if (!id || selectedSeats.length === 0) return;
 
         setSubmitStatus(null);
-        const result = await bookSeats(id, selectedSeats);
+        const success = await triggerOptimisticBook(selectedSeats);
 
-        if (result.status === 'success') {
+        if (success) {
             setSubmitStatus({ type: 'success', message: 'Booking confirmed successfully!' });
             setSelectedSeats([]);
-            await loadData(); // Refresh map immediately
+            await loadData(); // Fetch definitive state
         } else {
+            // Error handling is partly in hook (state revert), but we can show message here too
             setSubmitStatus({
                 type: 'error',
-                message: 'Booking failed. Some seats may have been taken.'
+                message: optimisticError || 'Booking failed. Some seats may have been taken.'
             });
-            await loadData(); // Refresh to show what was taken
         }
     };
 
@@ -74,9 +82,8 @@ export default function Booking() {
     }
 
     return (
-        <div className="pb-24"> {/* Padding for floating footer */}
+        <div className="pb-24">
             <div className="bg-white shadow sm:rounded-lg overflow-hidden">
-                {/* Header */}
                 <div className="px-6 py-5 border-b border-gray-200 bg-gray-50 flex items-center justify-between">
                     <div className="flex items-center space-x-4">
                         <Link to="/" className="text-gray-500 hover:text-gray-700 transition-colors">
@@ -91,7 +98,6 @@ export default function Booking() {
                     </div>
                 </div>
 
-                {/* Status Messages */}
                 {submitStatus && (
                     <div className={`mx-6 mt-6 p-4 rounded-md flex items-start ${submitStatus.type === 'success' ? 'bg-green-50 text-green-800' : 'bg-red-50 text-red-800'}`}>
                         <AlertCircle className={`w-5 h-5 mr-2 flex-shrink-0 ${submitStatus.type === 'success' ? 'text-green-500' : 'text-red-500'}`} />
@@ -99,7 +105,6 @@ export default function Booking() {
                     </div>
                 )}
 
-                {/* Grid */}
                 <div className="p-6">
                     <div className="mb-4 text-center">
                         <div className="w-3/4 h-2 bg-gray-300 mx-auto rounded-lg mb-2"></div>
@@ -108,7 +113,7 @@ export default function Booking() {
 
                     <SeatGrid
                         totalSeats={seatMap.total}
-                        bookedSeats={seatMap.booked}
+                        bookedSeats={optimisticBookedSeats} // Use optimistic data here
                         selectedSeats={selectedSeats}
                         onSelectionChange={setSelectedSeats}
                     />
@@ -117,8 +122,8 @@ export default function Booking() {
 
             <BookingSummary
                 selectedCount={selectedSeats.length}
-                onConfirm={handleBook}
-                isSubmitting={apiLoading}
+                onConfirm={handleConfirm}
+                isSubmitting={isSubmitting} // Use optimistic submitting state
             />
         </div>
     );
