@@ -1,4 +1,3 @@
-import React from 'react';
 import { Link } from 'react-router-dom';
 import { useShows } from '../contexts/ShowsContext';
 import { Calendar, Users } from 'lucide-react';
@@ -7,7 +6,25 @@ export default function Home() {
     const { shows, loading } = useShows();
 
     if (loading) {
-        return <div className="text-center py-10">Loading shows...</div>;
+        return (
+            <div className="px-4 py-6 sm:px-0">
+                <div className="h-8 w-48 bg-gray-200 rounded mb-8 animate-pulse"></div>
+                <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                    {[1, 2, 3].map((i) => (
+                        <div key={i} className="bg-white overflow-hidden shadow rounded-lg h-48 animate-pulse">
+                            <div className="px-4 py-5 sm:p-6 space-y-4">
+                                <div className="h-6 w-3/4 bg-gray-200 rounded"></div>
+                                <div className="space-y-2">
+                                    <div className="h-4 w-1/2 bg-gray-200 rounded"></div>
+                                    <div className="h-4 w-1/3 bg-gray-200 rounded"></div>
+                                </div>
+                                <div className="h-10 w-full bg-gray-200 rounded mt-4"></div>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            </div>
+        );
     }
 
     return (

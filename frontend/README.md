@@ -31,3 +31,18 @@ A React + TypeScript application for booking tickets.
 
 ## Configuration
 - API URL is configured in `src/contexts/ShowsContext.tsx` (default: `http://localhost:3000`).
+
+## Screenshots
+
+### Home Page (Loading & Loaded)
+![Home Page](/screenshots/home.png)
+*Shows list of upcoming events with loading skeletons.*
+
+### Seat Selection (Mobile & Desktop)
+![Seat Map](/screenshots/seatmap.png)
+*Responsive seat grid with instant selection feedback.*
+
+### Admin Dashboard
+![Admin](/screenshots/admin.png)
+*Create shows and manage bookings.*
+

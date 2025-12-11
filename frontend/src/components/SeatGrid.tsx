@@ -47,7 +47,7 @@ export const SeatGrid = memo(({ totalSeats, bookedSeats, onSelectionChange, sele
     };
 
     return (
-        <div className="grid grid-cols-6 sm:grid-cols-8 md:grid-cols-10 lg:grid-cols-12 gap-3 p-4 bg-gray-100 rounded-xl justify-items-center">
+        <div className="grid grid-cols-6 sm:grid-cols-8 md:grid-cols-10 lg:grid-cols-12 gap-1 sm:gap-3 p-4 bg-gray-100 rounded-xl justify-items-center">
             {Array.from({ length: totalSeats }, (_, i) => i + 1).map((seatNum) => {
                 const isBooked = bookedSeats.includes(seatNum);
 
@@ -58,7 +58,7 @@ export const SeatGrid = memo(({ totalSeats, bookedSeats, onSelectionChange, sele
                         disabled={isBooked}
                         onClick={() => handleSeatClick(seatNum)}
                         className={`
-              w-10 h-10 rounded-lg text-sm font-semibold shadow-sm transition-all duration-200 transform hover:scale-110 focus:outline-none focus:ring-2 focus:ring-offset-2
+              w-8 h-8 sm:w-10 sm:h-10 rounded-lg text-xs sm:text-sm font-semibold shadow-sm transition-all duration-200 transform hover:scale-110 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-600
               ${isBooked
                                 ? 'bg-gray-300 text-gray-500 cursor-not-allowed opacity-60'
                                 : 'bg-white text-gray-900 hover:bg-gray-50 border border-gray-200'

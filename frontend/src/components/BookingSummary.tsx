@@ -7,10 +7,8 @@ interface BookingSummaryProps {
 }
 
 export const BookingSummary = ({ selectedCount, onConfirm, isSubmitting }: BookingSummaryProps) => {
-    if (selectedCount === 0) return null;
-
     return (
-        <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)] p-4 transform transition-transform duration-300">
+        <div className={`fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)] p-4 transform transition-transform duration-300 z-50 ${selectedCount > 0 ? 'translate-y-0' : 'translate-y-full'}`}>
             <div className="max-w-7xl mx-auto flex items-center justify-between">
                 <div>
                     <p className="text-sm text-gray-500">Selected</p>
