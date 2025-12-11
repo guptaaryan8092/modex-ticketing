@@ -5,5 +5,6 @@ const bookingController = require('../controllers/bookingController');
 router.get('/shows/:id/seats', bookingController.getSeatMap);
 router.post('/shows/:id/book', bookingController.createBooking);
 router.get('/bookings/:id', bookingController.getBooking);
+router.post('/admin/run-expiry', bookingController.runExpiry);
 
 module.exports = router;

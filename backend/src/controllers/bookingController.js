@@ -1,4 +1,5 @@
 const bookingService = require('../services/bookingService');
+const { expireBookings } = require('../workers/expiry');
 
 class BookingController {
 
@@ -38,6 +39,16 @@ class BookingController {
         } catch (err) {
             console.error(err);
             res.status(500).json({ error: 'Internal Server Error' });
+        }
+    }
+
+    async runExpiry(req, res) {
+        try {
+            const count = await expireBookings();
+            res.json({ message: 'Expiry job run successfully', expired_count: count });
+        } catch (err) {
+            console.error(err);
+            res.status(500).json({ error: 'Failed to run expiry job' });
         }
     }
 }

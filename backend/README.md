@@ -29,6 +29,12 @@ When a booking request is received:
 
 This ensures that even if multiple requests successfully pass the initial service layer checks, the database lock ensures they are processed serially for the critical "check then update" section, preventing overbooking.
 
+### Booking Expiry
+A background worker runs every 30 seconds to clean up `PENDING` bookings that have not been confirmed within 2 minutes. These bookings are marked as `FAILED`.
+
+You can also manually trigger this process:
+**POST** `/admin/run-expiry`
+
 ## API Endpoints
 
 ### Create a Show
