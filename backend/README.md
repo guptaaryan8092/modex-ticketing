@@ -35,6 +35,19 @@ A background worker runs every 30 seconds to clean up `PENDING` bookings that ha
 You can also manually trigger this process:
 **POST** `/admin/run-expiry`
 
+## Docker Support
+
+We provide a `docker-compose.yml` to easily spin up the backend and a Postgres database.
+
+1.  **Run with Docker Compose**:
+    ```bash
+    docker-compose up --build
+    ```
+    This will start the database on port 5432 and the backend server on port 3000. It also automatically runs migrations.
+
+2.  **API Documentation**:
+    A Postman collection is available at `docs/postman_collection.json`. Import this file into Postman to test the API endpoints.
+
 ## API Endpoints
 
 ### Create a Show

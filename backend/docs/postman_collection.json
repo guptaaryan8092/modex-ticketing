@@ -1,0 +1,210 @@
+{
+    "info": {
+        "_postman_id": "f5f5f5f5-f5f5-f5f5-f5f5-f5f5f5f5f5f5",
+        "name": "Ticket Booking System",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "item": [
+        {
+            "name": "Shows",
+            "item": [
+                {
+                    "name": "Create Show",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"name\": \"Concert A\",\n    \"start_time\": \"2025-01-01T20:00:00Z\",\n    \"total_seats\": 50\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/admin/shows",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "admin",
+                                "shows"
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "List Shows",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseUrl}}/shows",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "shows"
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Get Seat Map",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseUrl}}/shows/:id/seats",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "shows",
+                                ":id",
+                                "seats"
+                            ],
+                            "variable": [
+                                {
+                                    "key": "id",
+                                    "value": "show-uuid-here"
+                                }
+                            ]
+                        }
+                    },
+                    "response": []
+                }
+            ]
+        },
+        {
+            "name": "Bookings",
+            "item": [
+                {
+                    "name": "Book Seats (Specific)",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"seats\": [1, 2]\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/shows/:id/book",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "shows",
+                                ":id",
+                                "book"
+                            ],
+                            "variable": [
+                                {
+                                    "key": "id",
+                                    "value": "show-uuid-here"
+                                }
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Book Seats (Count)",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"seats_count\": 2\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/shows/:id/book",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "shows",
+                                ":id",
+                                "book"
+                            ],
+                            "variable": [
+                                {
+                                    "key": "id",
+                                    "value": "show-uuid-here"
+                                }
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Get Booking Status",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseUrl}}/bookings/:id",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "bookings",
+                                ":id"
+                            ],
+                            "variable": [
+                                {
+                                    "key": "id",
+                                    "value": "booking-uuid-here"
+                                }
+                            ]
+                        }
+                    },
+                    "response": []
+                }
+            ]
+        },
+        {
+            "name": "Admin",
+            "item": [
+                {
+                    "name": "Run Expiry Job",
+                    "request": {
+                        "method": "POST",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseUrl}}/admin/run-expiry",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "admin",
+                                "run-expiry"
+                            ]
+                        }
+                    },
+                    "response": []
+                }
+            ]
+        }
+    ],
+    "variable": [
+        {
+            "key": "baseUrl",
+            "value": "http://localhost:3000",
+            "type": "string"
+        }
+    ]
+}
