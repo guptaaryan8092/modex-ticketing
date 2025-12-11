@@ -14,7 +14,7 @@ class ShowService {
                 include: [
                     [
                         sequelize.literal(`(
-              SELECT COUNT(*)::int
+            SELECT COALESCE(SUM(seats_requested), 0)::int
               FROM "Bookings" AS "booking"
               WHERE
                 "booking"."show_id" = "Show"."id"
