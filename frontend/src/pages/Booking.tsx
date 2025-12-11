@@ -9,7 +9,7 @@ import type { SeatMap } from '../types';
 
 export default function Booking() {
     const { id } = useParams<{ id: string }>();
-    const { fetchSeatMap, bookSeats, loading: apiLoading } = useShowsApi();
+    const { fetchSeatMap, bookSeats } = useShowsApi();
 
     const [seatMap, setSeatMap] = useState<SeatMap | null>(null);
     const [selectedSeats, setSelectedSeats] = useState<number[]>([]);
