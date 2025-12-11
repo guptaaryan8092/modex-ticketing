@@ -1,0 +1,23 @@
+# Backend Production/Deployment Dockerfile
+
+FROM node:18-alpine
+
+WORKDIR /app
+
+# Copy package files first for caching
+COPY backend/package.json backend/package-lock.json ./
+
+# Install production dependencies
+# Note: If you need devDependencies for build steps (like tsc), remove --production
+RUN npm install --production
+
+# Copy backend source code
+COPY backend/ .
+
+# Expose the API port
+EXPOSE 3000
+
+# Start command
+# Ensure you run migrations in your deployment platform's release phase if possible,
+# or strictly control when this runs to avoid locking the DB on scaling.
+CMD ["npm", "start"]
